@@ -1,15 +1,17 @@
-from langchain_core.vector_store import InMemoryVectorStore
+from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_ollama import OllamaEmbeddings
 
 from langchain_ollama.llms import OllamaLLM
-from langchain_community.document_loaders import PDFPlumberloader
+from langchain_community.document_loaders import PDFPlumberLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.prompts import ChatPromptTemplate
 
-pdfs_directory ='./pdfs/'
+
+pdfs_directory ='pdfs/'
 embeddings = OllamaEmbeddings(model='deepseek-r1:14b')
 vector_store= InMemoryVectorStore(embeddings)
 
-model = OllamaLLM(model='deepseek-r1:14b')
+model = OllamaLLM(model='deepseek-r1:1.5b')
 
 import streamlit as st
 
@@ -24,8 +26,8 @@ def upload_pdf(file):
     with open(pdfs_directory + file.name, "wb") as f:
         f.write(file.getbuffer())
 
-def load_pdf(file):
-    loader = PDFPlumberloader(file_path)
+def load_pdf(file_path):
+    loader = PDFPlumberLoader(file_path)
     documents = loader.load()
     return documents
 
@@ -41,7 +43,7 @@ def split_text(file):
 def index_docs(file):
     vector_store.add_documents(documents)
 
-def retreive_docs(file):
+def retreive_docs(query):
     return vector_store.similarity_search(query)
 
 def answer_question(question, documents):
