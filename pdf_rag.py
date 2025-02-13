@@ -8,7 +8,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 
 pdfs_directory ='pdfs/'
-embeddings = OllamaEmbeddings(model='deepseek-r1:14b')
+embeddings = OllamaEmbeddings(model='deepseek-r1:1.5b')
 vector_store= InMemoryVectorStore(embeddings)
 
 model = OllamaLLM(model='deepseek-r1:1.5b')
